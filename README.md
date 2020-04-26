@@ -2,6 +2,8 @@
 
 This repo shows the steps that were involved going from a human shaped mesh to generating random animations of a person scanning items at a checkout.
 
+Using Blender 2.82a and it's python scripting API
+
 #### Align Armature
 ![alt text](/media/1.armature_alignment.png.jpg)  
 #### Align Armature - Right Orthogonal View
