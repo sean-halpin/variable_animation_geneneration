@@ -212,3 +212,36 @@ for index in range(5):
     bpy.context.area.type = currentContext
     bpy.ops.pose.select_all(action="DESELECT")
 
+# Render all animations - assuming cameras and render options for animations are set
+output_dir = "/tmp/renders/"
+
+# Make a list of all animations in the NLA
+nla_strips = []
+for obj in C.scene.objects:
+    if obj.animation_data and obj.animation_data.nla_tracks:
+        for track in obj.animation_data.nla_tracks:
+            for strip in track.strips:
+                nla_strips.append((strip, strip.mute))
+                strip.mute = True
+
+# Save scene details in order to restore later
+orig_frame_start = scene.frame_start
+orig_frame_end = scene.frame_end
+orig_filepath = scene.render.filepath
+
+# render each strip
+for strip in nla_strips:
+    scene.render.filepath = output_dir + strip[0].name + "/"
+    scene.frame_start = strip[0].frame_start
+    scene.frame_end = strip[0].frame_end
+    strip[0].mute = False
+    bpy.ops.render.render(animation=True)
+    strip[0].mute = True
+
+# Restore changes that were made
+scene.frame_start = orig_frame_start
+scene.frame_end = orig_frame_end
+scene.render.filepath = orig_filepath
+
+for strip in nla_strips:
+    strip[0].mute = strip[1]

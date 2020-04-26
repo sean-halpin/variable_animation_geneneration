@@ -28,3 +28,28 @@ Using Blender 2.82a and it's python scripting API
 ![alt text](/media/9.scripting_inserting_keyframes_into_animation_timeline.png.jpg)  
 #### Animating - Add a random variation and push animations to NLA in a loop
 ![alt text](/media/10.scripting_random_variation_pushing_animations_to_NLA_timeline.png.jpg)  
+#### Rendering - file output
+The Script will currently render all the animations to `/tmp/renders` with each animation in it's own folder
+ - Named `/tmp/renders/actionName/#frames-in-render.mp4`
+```
+.
+├── rigAction.045
+│   └── 0000-0047.mp4
+├── rigAction.046
+│   └── 0000-0047.mp4
+├── rigAction.047
+│   └── 0000-0047.mp4
+├── rigAction.048
+│   └── 0000-0047.mp4
+└── rigAction.049
+    └── 0000-0047.mp4
+
+5 directories, 5 files
+```
+#### Rendering - Video Output
+The rendered output is currently an `mp4` containing `h264`
+A screenshot of the rendered output without any materials applied below;  
+
+![alt text](/media/11.rendered_output_screenshot.jpg)
+
+
