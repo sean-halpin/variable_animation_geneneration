@@ -5,12 +5,13 @@ from mathutils import *
 
 D = bpy.data
 C = bpy.context
+scene = C.scene
 
 print("Blender Python Script")
 bpy.context.area.type = "TEXT_EDITOR"
 
 for index in range(5):
-    randomOffset = (random.randint(0, 100) / 100.0) / 5.0
+    randomOffset = (random.randint(0, 100) / 100.0) / 4.0
     # Deselect all objs
     bpy.ops.object.mode_set(mode="OBJECT", toggle=False)
     bpy.ops.object.select_all(action="DESELECT")
@@ -212,12 +213,29 @@ for index in range(5):
     bpy.context.area.type = currentContext
     bpy.ops.pose.select_all(action="DESELECT")
 
+# Handler to run for each frame rendered so we may log metadata about each frame
+def render_frame_handler(scene):
+    print("Frame Rendering")
+    # print(D.objects["rig"].data.bones["hand_ik.R"].head)
+    # print(D.objects["rig"].data.bones["hand_ik.L"].head)
+
+
+def register():
+    bpy.app.handlers.frame_change_post.append(render_frame_handler)
+
+
+def unregister():
+    bpy.app.handlers.frame_change_post.remove(render_frame_handler)
+
+
+register()
+
 # Render all animations - assuming cameras and render options for animations are set
 output_dir = "/tmp/renders/"
 
 # Make a list of all animations in the NLA
 nla_strips = []
-for obj in C.scene.objects:
+for obj in scene.objects:
     if obj.animation_data and obj.animation_data.nla_tracks:
         for track in obj.animation_data.nla_tracks:
             for strip in track.strips:
@@ -245,3 +263,5 @@ scene.render.filepath = orig_filepath
 
 for strip in nla_strips:
     strip[0].mute = strip[1]
+
+unregister()
