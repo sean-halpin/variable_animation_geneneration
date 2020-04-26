@@ -4,6 +4,10 @@ This repo shows the steps that were involved going from a human shaped mesh to g
 
 Using Blender 2.82a and it's python scripting API
 
+### Scripted Animation Output
+![alt test](/media/0.scanning_anim.gif)  
+
+### Step by Step (in pictures)
 #### Align Armature
 ![alt text](/media/1.armature_alignment.png.jpg)  
 #### Align Armature - Right Orthogonal View
