@@ -1,4 +1,5 @@
 import bpy
+import json
 import random
 import time
 import logging
@@ -12,8 +13,8 @@ print("Blender Python Script")
 bpy.context.area.type = "TEXT_EDITOR"
 
 try:
-    for index in range(5):
-        randomOffset = (random.randint(0, 100) / 100.0) / 4.0
+    for index in range(2):
+        randomOffset = (random.randint(0, 100) / 100.0) /2.5
         # Deselect all objs
         bpy.ops.object.mode_set(mode="OBJECT", toggle=False)
         bpy.ops.object.select_all(action="DESELECT")
@@ -215,23 +216,6 @@ try:
         bpy.context.area.type = currentContext
         bpy.ops.pose.select_all(action="DESELECT")
 
-    # Handler to run for each frame rendered so we may log metadata about each frame
-    def render_frame_handler(scene):
-        print("Frame Rendering")
-        # print(D.objects["rig"].data.bones["hand_ik.R"].head)
-        # print(D.objects["rig"].data.bones["hand_ik.L"].head)
-
-
-    def register():
-        bpy.app.handlers.frame_change_post.append(render_frame_handler)
-
-
-    def unregister():
-        bpy.app.handlers.frame_change_post.remove(render_frame_handler)
-
-
-    register()
-
     # Render all animations - assuming cameras and render options for animations are set
     output_dir = "/tmp/renders/"
 
@@ -254,8 +238,30 @@ try:
         scene.render.filepath = output_dir + strip[0].name + "/"
         scene.frame_start = strip[0].frame_start
         scene.frame_end = strip[0].frame_end
+        # Unmute this strip
         strip[0].mute = False
         bpy.ops.render.render(animation=True)
+        # Record metadata for each frame in the strip
+        for frame_index in range(int(strip[0].frame_end - strip[0].frame_start)):
+            try:
+                scene.frame_set(frame_index)
+                print("Recording Frame #{} Metadata: {}".format(frame_index, scene.render.filepath))
+                data = {}
+                data["frame_current"] = scene.frame_current
+                data["hand.r.x"] = D.objects["rig"].pose.bones["hand_ik.R"].location.xyz.x
+                data["hand.r.y"] = D.objects["rig"].pose.bones["hand_ik.R"].location.xyz.y
+                data["hand.r.z"] = D.objects["rig"].pose.bones["hand_ik.R"].location.xyz.z
+                data["hand.l.x"] = D.objects["rig"].pose.bones["hand_ik.L"].location.xyz.x
+                data["hand.l.y"] = D.objects["rig"].pose.bones["hand_ik.L"].location.xyz.y
+                data["hand.l.z"] = D.objects["rig"].pose.bones["hand_ik.L"].location.xyz.z
+                with open(scene.render.filepath + 'annotations.txt', 'a') as f:
+                       json.dump(data, f, sort_keys = False, indent = 4, ensure_ascii = False)
+                       f.write('\n')
+            except Exception as e:
+                logging.exception("Custom Frame Handler Exception")
+            finally:
+                scene.frame_set(0)
+        # Mute this strip
         strip[0].mute = True
 
     # Restore changes that were made
@@ -269,4 +275,4 @@ try:
 except Exception as e:
     logging.exception("Exception")
 finally:
-    unregister()
+    print("Complete")

@@ -33,23 +33,65 @@ The Script will currently render all the animations to `/tmp/renders` with each 
  - Named `/tmp/renders/actionName/#frames-in-render.mp4`
 ```
 .
-├── rigAction.045
-│   └── 0000-0047.mp4
-├── rigAction.046
-│   └── 0000-0047.mp4
-├── rigAction.047
-│   └── 0000-0047.mp4
-├── rigAction.048
-│   └── 0000-0047.mp4
-└── rigAction.049
-    └── 0000-0047.mp4
+├── rigAction.035
+│   ├── 0000-0047.mp4
+│   └── annotations.txt
+├── rigAction.036
+│   ├── 0000-0047.mp4
+│   └── annotations.txt
+├── rigAction.037
+│   ├── 0000-0047.mp4
+│   └── annotations.txt
+├── rigAction.038
+│   ├── 0000-0047.mp4
+│   └── annotations.txt
+├── rigAction.039
+│   ├── 0000-0047.mp4
+│   └── annotations.txt
+└── rigAction.040
+    ├── 0000-0047.mp4
+    └── annotations.txt
 
-5 directories, 5 files
+6 directories, 12 files
+
 ```
 #### Rendering - Video Output
-The rendered output is currently an `mp4` containing `h264`
-A screenshot of the rendered output without any materials applied below;  
+The rendered output is currently an `mp4` containing `h264`  
+
+ - Screenshot of the rendered output without any materials applied below;  
 
 ![alt text](/media/11.rendered_output_screenshot.jpg)
 
+#### Rendering - Record accurate metadata/annotations for every frame
 
+ - Example `annotations.txt` contents that is recorded alongside every rendered mp4  
+ 
+```
+{
+    "frame_current": 0,
+    "hand.r.x": -0.0824587419629097,
+    "hand.r.y": 0.12269103527069092,
+    "hand.r.z": 0.32035717368125916,
+    "hand.l.x": 0.08245903998613358,
+    "hand.l.y": 0.12269102036952972,
+    "hand.l.z": 0.3203571140766144
+}
+{
+    "frame_current": 1,
+    "hand.r.x": -0.08431647717952728,
+    "hand.r.y": 0.12105774134397507,
+    "hand.r.z": 0.3205045163631439,
+    "hand.l.x": 0.08431677520275116,
+    "hand.l.y": 0.12105772644281387,
+    "hand.l.z": 0.32050445675849915
+}
+{
+    "frame_current": 2,
+    "hand.r.x": -0.08966787159442902,
+    "hand.r.y": 0.1163528710603714,
+    "hand.r.z": 0.3209289610385895,
+    "hand.l.x": 0.0896681696176529,
+    "hand.l.y": 0.1163528561592102,
+    "hand.l.z": 0.3209289014339447
+}
+```
